@@ -40,4 +40,5 @@ export interface AppState {
   supervisors: Supervisor[];
   timeSheets: WeeklyTimeSheet[];
   currentUser: Supervisor | null;
+  googleScriptUrl: string;
 }

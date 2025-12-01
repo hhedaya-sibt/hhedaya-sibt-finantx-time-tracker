@@ -47,6 +47,8 @@ export default function App() {
   // State Updaters
   const updateSupervisors = (supervisors: Supervisor[]) => setState(prev => ({ ...prev, supervisors }));
   const updateEmployees = (employees: Employee[]) => setState(prev => ({ ...prev, employees }));
+  const updateGoogleScriptUrl = (url: string) => setState(prev => ({ ...prev, googleScriptUrl: url }));
+  
   const updateTimeSheet = (sheet: WeeklyTimeSheet) => {
     setState(prev => {
       // Remove old version of this specific sheet and add new one
@@ -110,7 +112,12 @@ export default function App() {
     switch (currentPath) {
       case '/admin':
         return state.currentUser?.isAdmin ? (
-          <SuperAdminDashboard supervisors={state.supervisors} setSupervisors={updateSupervisors} />
+          <SuperAdminDashboard 
+            supervisors={state.supervisors} 
+            setSupervisors={updateSupervisors} 
+            googleScriptUrl={state.googleScriptUrl}
+            setGoogleScriptUrl={updateGoogleScriptUrl}
+          />
         ) : (
           <div className="p-4 text-red-500">Access Denied</div>
         );
@@ -130,6 +137,7 @@ export default function App() {
             timeSheets={state.timeSheets}
             updateTimeSheet={updateTimeSheet}
             currentUser={state.currentUser!}
+            googleScriptUrl={state.googleScriptUrl}
           />
         );
     }

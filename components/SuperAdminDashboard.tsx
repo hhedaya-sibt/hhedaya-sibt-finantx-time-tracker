@@ -5,11 +5,19 @@ import { DEPARTMENTS } from '../constants';
 interface SuperAdminDashboardProps {
   supervisors: Supervisor[];
   setSupervisors: (s: Supervisor[]) => void;
+  googleScriptUrl: string;
+  setGoogleScriptUrl: (url: string) => void;
 }
 
-export const SuperAdminDashboard: React.FC<SuperAdminDashboardProps> = ({ supervisors, setSupervisors }) => {
+export const SuperAdminDashboard: React.FC<SuperAdminDashboardProps> = ({ 
+  supervisors, 
+  setSupervisors, 
+  googleScriptUrl, 
+  setGoogleScriptUrl 
+}) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
+  const [showScriptHelp, setShowScriptHelp] = useState(false);
   
   const [formData, setFormData] = useState<Partial<Supervisor>>({
     firstName: '',
@@ -67,8 +75,97 @@ export const SuperAdminDashboard: React.FC<SuperAdminDashboardProps> = ({ superv
   };
 
   return (
-    <div className="space-y-6">
-      <div className="flex justify-between items-center">
+    <div className="space-y-8">
+      {/* Integrations Section */}
+      <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
+        <h2 className="text-xl font-bold text-slate-900 mb-4">Google Sheet Integration</h2>
+        <div className="space-y-4">
+          <div>
+            <label className="block text-sm font-medium text-slate-700 mb-1">Google Apps Script Web App URL</label>
+            <div className="flex gap-2">
+              <input 
+                type="text" 
+                placeholder="https://script.google.com/macros/s/..."
+                className="flex-1 px-3 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-finantx-500 outline-none"
+                value={googleScriptUrl}
+                onChange={(e) => setGoogleScriptUrl(e.target.value)}
+              />
+              <button 
+                onClick={() => setShowScriptHelp(!showScriptHelp)}
+                className="px-4 py-2 bg-slate-100 text-slate-600 rounded-lg hover:bg-slate-200 transition-colors"
+              >
+                {showScriptHelp ? 'Hide Setup Info' : 'View Setup Info'}
+              </button>
+            </div>
+            <p className="text-xs text-slate-500 mt-1">
+              Paste the URL generated when deploying your Apps Script as a Web App here.
+            </p>
+          </div>
+
+          {showScriptHelp && (
+            <div className="bg-slate-50 p-4 rounded-lg border border-slate-200 text-sm space-y-2">
+              <p className="font-semibold text-slate-800">Setup Instructions:</p>
+              <ol className="list-decimal pl-5 space-y-1 text-slate-600">
+                <li>Open your Google Sheet and go to <strong>Extensions &gt; Apps Script</strong>.</li>
+                <li>Paste the script below into the code editor.</li>
+                <li>Click <strong>Deploy &gt; New deployment</strong>.</li>
+                <li>Select type: <strong>Web app</strong>.</li>
+                <li>Set "Who has access" to: <strong>Anyone</strong> (Required for app to post data).</li>
+                <li>Click Deploy and copy the URL provided.</li>
+              </ol>
+              <div className="mt-2">
+                <code className="block bg-slate-800 text-slate-100 p-3 rounded text-xs font-mono overflow-x-auto whitespace-pre">
+{`function doPost(e) {
+  var lock = LockService.getScriptLock();
+  lock.tryLock(10000);
+
+  try {
+    var doc = SpreadsheetApp.openById("1o1k_JAUwhKO85oGX3BJux9NO5X6NeKbfIYOw6pogYjA");
+    var data = JSON.parse(e.postData.contents);
+    
+    data.forEach(function(row) {
+      var sheetName = row["Department"]; 
+      var sheet = doc.getSheetByName(sheetName);
+      if (!sheet) sheet = doc.getSheetByName("Sheet1"); 
+      
+      if (sheet) {
+         // Order: Primary Co, Emp First, Emp Last, Sup First, Sup Last, Mon Date, Mon Hrs...
+         var values = [
+           row["Primary company"],
+           row["Employee first name"],
+           row["Employee last name"],
+           row["Supervisor first name"],
+           row["Supervisor last name"],
+           row["Monday Date"], row["Monday Hours"],
+           row["Tuesday Date"], row["Tuesday Hours"],
+           row["Wednesday Date"], row["Wednesday Hours"],
+           row["Thursday Date"], row["Thursday Hours"],
+           row["Friday Date"], row["Friday Hours"],
+           row["Saturday Date"], row["Saturday Hours"],
+           row["Total hours"],
+           row["Rate"]
+         ];
+         sheet.appendRow(values);
+      }
+    });
+
+    return ContentService.createTextOutput(JSON.stringify({ "result": "success" }))
+      .setMimeType(ContentService.MimeType.JSON);
+  } catch (e) {
+    return ContentService.createTextOutput(JSON.stringify({ "result": "error", "error": e.toString() }))
+      .setMimeType(ContentService.MimeType.JSON);
+  } finally {
+    lock.releaseLock();
+  }
+}`}
+                </code>
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+
+      <div className="flex justify-between items-center border-t pt-6 border-slate-200">
         <div>
           <h2 className="text-2xl font-bold text-slate-900">Department Supervisors</h2>
           <p className="text-slate-500">Manage access and department assignments</p>

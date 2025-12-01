@@ -8,6 +8,7 @@ const getInitialState = (): AppState => ({
   supervisors: INITIAL_SUPERVISORS,
   timeSheets: [],
   currentUser: null,
+  googleScriptUrl: '',
 });
 
 export const loadState = (): AppState => {

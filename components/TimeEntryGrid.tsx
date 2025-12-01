@@ -8,6 +8,7 @@ interface TimeEntryGridProps {
   timeSheets: WeeklyTimeSheet[];
   updateTimeSheet: (sheet: WeeklyTimeSheet) => void;
   currentUser: Supervisor;
+  googleScriptUrl: string;
 }
 
 // Utility to get the Monday of the previous week
@@ -30,9 +31,10 @@ const formatDateKey = (d: Date) => {
   return d.toISOString().split('T')[0];
 };
 
-export const TimeEntryGrid: React.FC<TimeEntryGridProps> = ({ employees, timeSheets, updateTimeSheet, currentUser }) => {
+export const TimeEntryGrid: React.FC<TimeEntryGridProps> = ({ employees, timeSheets, updateTimeSheet, currentUser, googleScriptUrl }) => {
   const [selectedWeekStart, setSelectedWeekStart] = useState<Date>(getPreviousMonday());
   const [isGenerating, setIsGenerating] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
   
   // Calculate the 6 days (Mon-Sat) for columns
   const weekDays = Array.from({ length: 6 }, (_, i) => {
@@ -67,7 +69,6 @@ export const TimeEntryGrid: React.FC<TimeEntryGridProps> = ({ employees, timeShe
     }
 
     const newEntries = { ...sheet.entries, [dateStr]: numVal };
-    // Remove if 0 to keep clean? Optional. Keeping 0 is fine.
     
     updateTimeSheet({ ...sheet, entries: newEntries });
   };
@@ -82,14 +83,16 @@ export const TimeEntryGrid: React.FC<TimeEntryGridProps> = ({ employees, timeShe
 
   const handlePrepareSubmission = async () => {
     setIsGenerating(true);
+    setSubmitStatus('idle');
 
     // 1. Gather Data in the exact requested format
     const submissionData = accessibleEmployees.map(emp => {
       const totalHours = calculateRowTotal(emp.id);
-      if (totalHours === 0) return null; // Skip employees with no hours? Or include 0. Let's skip empty for email clarity.
+      if (totalHours === 0) return null; // Skip employees with no hours
 
       const row: any = {
         "Primary company": "Card Shield", // Hardcoded based on example
+        "Department": emp.department, // Used for routing to correct sheet tab
         "Employee first name": emp.firstName,
         "Employee last name": emp.lastName,
         "Supervisor first name": currentUser.firstName,
@@ -114,7 +117,25 @@ export const TimeEntryGrid: React.FC<TimeEntryGridProps> = ({ employees, timeShe
       return;
     }
 
-    // 2. Generate Email with Gemini
+    // 2. Google Sheet Submission
+    if (googleScriptUrl) {
+      try {
+        await fetch(googleScriptUrl, {
+          method: 'POST',
+          mode: 'no-cors', // Important for Google Apps Script Web Apps
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(submissionData)
+        });
+        setSubmitStatus('success');
+      } catch (error) {
+        console.error("Google Sheet Error:", error);
+        setSubmitStatus('error');
+      }
+    }
+
+    // 3. Generate Email with Gemini
     const { subject, body } = await generateEmailDraft(
       currentUser,
       formatDateShort(selectedWeekStart),
@@ -124,26 +145,25 @@ export const TimeEntryGrid: React.FC<TimeEntryGridProps> = ({ employees, timeShe
     
     setIsGenerating(false);
 
-    // 3. Create Mailto Link
-    // Note: mailto links have a length limit. For large datasets, this might truncate.
-    // In that case, we fallback to copying to clipboard.
+    // 4. Create Mailto Link
     const mailtoLink = `mailto:${SUBMISSION_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
     
     // Open standard email client
     window.location.href = mailtoLink;
 
-    // 4. Log "Fake" Google Sheet Submission
-    console.group("Simulated Google Sheet Submission");
-    console.log(`POST to ${GOOGLE_SHEET_URL}`);
-    console.table(submissionData);
-    console.groupEnd();
-
-    alert(`
-      1. Email client opened with report.
-      2. Data prepared for Google Sheet (Simulated - check console).
-      
-      Please verify the email content before sending!
-    `);
+    if (!googleScriptUrl) {
+      alert(`
+        1. Email client opened.
+        2. Google Sheet submission skipped (No Script URL configured).
+        
+        Please ask a Super Admin to configure the Google Apps Script URL.
+      `);
+    } else {
+      alert(`
+        1. Email client opened.
+        2. Data submitted to Google Sheet.
+      `);
+    }
   };
 
   return (
@@ -161,9 +181,6 @@ export const TimeEntryGrid: React.FC<TimeEntryGridProps> = ({ employees, timeShe
             value={formatDateKey(selectedWeekStart)}
             onChange={(e) => {
               const d = new Date(e.target.value);
-              // Ensure we snap to Monday if user picks another day? 
-              // For simplicity, let's assume they pick the monday, or we just trust the date picker.
-              // Better: force calculate monday.
               const day = d.getDay();
               const diff = d.getDate() - day + (day === 0 ? -6 : 1); 
               d.setDate(diff);
@@ -236,9 +253,18 @@ export const TimeEntryGrid: React.FC<TimeEntryGridProps> = ({ employees, timeShe
         </div>
         
         <div className="bg-slate-50 p-4 border-t border-slate-200 flex justify-between items-center">
-           <div className="text-xs text-slate-500">
-             <span className="font-semibold text-slate-700">Note:</span> Data is auto-saved locally. Submit to notify Admin.
+           <div className="flex flex-col">
+             <div className="text-xs text-slate-500">
+               <span className="font-semibold text-slate-700">Note:</span> Data is auto-saved locally. Submit to notify Admin.
+             </div>
+             {submitStatus === 'success' && (
+               <span className="text-xs text-green-600 font-bold mt-1">✓ Last submission sent to Google Sheets</span>
+             )}
+             {submitStatus === 'error' && (
+               <span className="text-xs text-red-600 font-bold mt-1">⚠ Failed to send to Google Sheets</span>
+             )}
            </div>
+           
            <button
              onClick={handlePrepareSubmission}
              disabled={isGenerating || accessibleEmployees.length === 0}
@@ -252,7 +278,7 @@ export const TimeEntryGrid: React.FC<TimeEntryGridProps> = ({ employees, timeShe
                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                  </svg>
-                 Analyzing...
+                 Processing...
                </>
              ) : (
                <>
