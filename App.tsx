@@ -75,7 +75,7 @@ export default function App() {
                  id="login-email"
                  type="email" 
                  placeholder="name@finantx.com"
-                 className="w-full px-4 py-3 rounded-lg border border-slate-600 bg-slate-700 text-white placeholder-slate-400 focus:ring-2 focus:ring-finantx-500 outline-none"
+                 className="w-full px-4 py-3 rounded-lg border border-slate-600 bg-slate-700 text-white placeholder-slate-200 font-medium focus:ring-2 focus:ring-finantx-500 outline-none"
                  onKeyDown={(e) => {
                    if(e.key === 'Enter') handleLogin(e.currentTarget.value);
                  }}

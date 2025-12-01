@@ -157,7 +157,7 @@ export const TimeEntryGrid: React.FC<TimeEntryGridProps> = ({ employees, timeShe
           <label className="text-sm font-medium text-slate-700">Week of:</label>
           <input 
             type="date" 
-            className="px-3 py-2 bg-slate-700 text-white border border-slate-600 rounded-lg shadow-sm focus:ring-finantx-500 focus:border-finantx-500 outline-none [color-scheme:dark]"
+            className="px-3 py-2 bg-slate-700 text-white font-medium border border-slate-600 rounded-lg shadow-sm focus:ring-finantx-500 focus:border-finantx-500 outline-none [color-scheme:dark]"
             value={formatDateKey(selectedWeekStart)}
             onChange={(e) => {
               const d = new Date(e.target.value);
@@ -211,7 +211,7 @@ export const TimeEntryGrid: React.FC<TimeEntryGridProps> = ({ employees, timeShe
                             max="24"
                             step="0.5"
                             placeholder="-"
-                            className="w-full h-10 text-center rounded bg-slate-700 text-white placeholder-slate-400 focus:bg-slate-600 focus:ring-2 focus:ring-finantx-500 outline-none transition-all font-mono"
+                            className="w-full h-10 text-center rounded bg-slate-700 text-white placeholder-slate-200 font-medium focus:bg-slate-600 focus:ring-2 focus:ring-finantx-500 outline-none transition-all font-mono"
                             value={getHours(emp.id, dateKey)}
                             onChange={(e) => handleHourChange(emp.id, dateKey, e.target.value)}
                           />

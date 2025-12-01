@@ -13,7 +13,12 @@ const getInitialState = (): AppState => ({
 export const loadState = (): AppState => {
   const stored = localStorage.getItem(STORAGE_KEY);
   if (stored) {
-    return JSON.parse(stored);
+    try {
+      return JSON.parse(stored);
+    } catch (error) {
+      console.error('Failed to load state from local storage:', error);
+      return getInitialState();
+    }
   }
   return getInitialState();
 };
