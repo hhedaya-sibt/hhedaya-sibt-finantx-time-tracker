@@ -5,23 +5,40 @@ export const DEPARTMENTS = [
   Department.OPERATIONS,
   Department.AFFILIATE,
   Department.SIBT_PWR_ADMIN,
+  Department.ACCOUNTING,
 ];
 
 export const INITIAL_SUPERVISORS: Supervisor[] = [
   {
     id: 'sup-1',
-    firstName: 'Super',
-    lastName: 'Admin',
-    email: 'admin@finantx.com',
-    departments: DEPARTMENTS, // Access to all
+    firstName: 'Harry',
+    lastName: 'Hedaya',
+    email: 'hhedaya@senditbytext.com',
+    departments: DEPARTMENTS, 
     isAdmin: true,
   },
   {
     id: 'sup-2',
+    firstName: 'Sheri',
+    lastName: 'Smith',
+    email: 'sheri33600@gmail.com',
+    departments: [Department.ACCOUNTING],
+    isAdmin: true,
+  },
+  {
+    id: 'sup-3',
     firstName: 'Joel',
     lastName: 'Vorbeck',
-    email: 'joel@finantx.com',
-    departments: [Department.AFFILIATE, Department.OPERATIONS],
+    email: 'jvorbeck@cardshield.me',
+    departments: [Department.SALES, Department.OPERATIONS, Department.SIBT_PWR_ADMIN, Department.AFFILIATE],
+    isAdmin: true,
+  },
+  {
+    id: 'sup-4',
+    firstName: 'Abe',
+    lastName: 'Tozier',
+    email: 'atozier@cardshield.me',
+    departments: [Department.OPERATIONS, Department.AFFILIATE],
     isAdmin: false,
   },
 ];
@@ -47,3 +64,4 @@ export const INITIAL_EMPLOYEES: Employee[] = [
 
 export const GOOGLE_SHEET_URL = "https://docs.google.com/spreadsheets/d/1o1k_JAUwhKO85oGX3BJux9NO5X6NeKbfIYOw6pogYjA/edit?usp=sharing";
 export const SUBMISSION_EMAIL = "employeehours@plansvcs.com";
+export const DEFAULT_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzb1pv0hs87aDPtbRmITg67OVb4A7li7nS79rMTw3LCZphL-Un9V5rpv_6_tfOS6bNI/exec";

@@ -1,5 +1,5 @@
 import { Employee, Supervisor, WeeklyTimeSheet, AppState } from '../types';
-import { INITIAL_EMPLOYEES, INITIAL_SUPERVISORS } from '../constants';
+import { INITIAL_EMPLOYEES, INITIAL_SUPERVISORS, DEFAULT_SCRIPT_URL } from '../constants';
 
 const STORAGE_KEY = 'finantx_app_v1';
 
@@ -8,7 +8,7 @@ const getInitialState = (): AppState => ({
   supervisors: INITIAL_SUPERVISORS,
   timeSheets: [],
   currentUser: null,
-  googleScriptUrl: '',
+  googleScriptUrl: DEFAULT_SCRIPT_URL,
 });
 
 export const loadState = (): AppState => {

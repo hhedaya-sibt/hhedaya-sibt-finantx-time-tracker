@@ -35,7 +35,7 @@ export default function App() {
       setState(prev => ({ ...prev, currentUser: user }));
       navigate('/track-hours');
     } else {
-      alert('User not found. Try "admin@finantx.com" or "joel@finantx.com"');
+      alert('User not found. Please use an authorized email address.');
     }
   };
 
@@ -94,9 +94,13 @@ export default function App() {
              </button>
              
              <div className="mt-6 p-4 bg-blue-50 rounded-lg text-sm text-blue-800">
-               <p className="font-bold mb-1">Demo Credentials:</p>
-               <p>Super Admin: <code className="bg-blue-100 px-1 rounded">admin@finantx.com</code></p>
-               <p>Supervisor: <code className="bg-blue-100 px-1 rounded">joel@finantx.com</code></p>
+               <p className="font-bold mb-1">Authorized Users:</p>
+               <div className="space-y-1 text-xs font-mono">
+                 <p>hhedaya@senditbytext.com</p>
+                 <p>sheri33600@gmail.com</p>
+                 <p>jvorbeck@cardshield.me</p>
+                 <p>atozier@cardshield.me</p>
+               </div>
              </div>
 
              <div className="text-center pt-4">
