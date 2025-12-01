@@ -15,7 +15,16 @@ export const loadState = (): AppState => {
   const stored = localStorage.getItem(STORAGE_KEY);
   if (stored) {
     try {
-      return JSON.parse(stored);
+      const parsedState = JSON.parse(stored);
+      
+      // CRITICAL FIX: Merge the hardcoded supervisors into the stored state.
+      // This ensures that the new list of authorized users (Harry, Sheri, etc.) 
+      // overrides any old data saved in the browser, allowing you to log in immediately.
+      return {
+        ...parsedState,
+        supervisors: INITIAL_SUPERVISORS, // Always use the code as source of truth for access
+        googleScriptUrl: parsedState.googleScriptUrl || DEFAULT_SCRIPT_URL // Ensure URL exists
+      };
     } catch (error) {
       console.error('Failed to load state from local storage:', error);
       return getInitialState();
