@@ -86,7 +86,7 @@ export const SuperAdminDashboard: React.FC<SuperAdminDashboardProps> = ({
               <input 
                 type="text" 
                 placeholder="https://script.google.com/macros/s/..."
-                className="flex-1 px-3 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-finantx-500 outline-none"
+                className="flex-1 px-3 py-2 rounded-lg border border-slate-600 bg-slate-700 text-white placeholder-slate-400 focus:ring-2 focus:ring-finantx-500 outline-none"
                 value={googleScriptUrl}
                 onChange={(e) => setGoogleScriptUrl(e.target.value)}
               />
@@ -226,7 +226,7 @@ export const SuperAdminDashboard: React.FC<SuperAdminDashboardProps> = ({
                   <label className="block text-sm font-medium text-slate-700 mb-1">First Name</label>
                   <input 
                     required 
-                    className="w-full px-3 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-finantx-500 focus:border-finantx-500 outline-none"
+                    className="w-full px-3 py-2 rounded-lg border border-slate-600 bg-slate-700 text-white placeholder-slate-400 focus:ring-2 focus:ring-finantx-500 focus:border-finantx-500 outline-none"
                     value={formData.firstName}
                     onChange={e => setFormData({...formData, firstName: e.target.value})}
                   />
@@ -235,7 +235,7 @@ export const SuperAdminDashboard: React.FC<SuperAdminDashboardProps> = ({
                   <label className="block text-sm font-medium text-slate-700 mb-1">Last Name</label>
                   <input 
                     required 
-                    className="w-full px-3 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-finantx-500 focus:border-finantx-500 outline-none"
+                    className="w-full px-3 py-2 rounded-lg border border-slate-600 bg-slate-700 text-white placeholder-slate-400 focus:ring-2 focus:ring-finantx-500 focus:border-finantx-500 outline-none"
                     value={formData.lastName}
                     onChange={e => setFormData({...formData, lastName: e.target.value})}
                   />
@@ -247,7 +247,7 @@ export const SuperAdminDashboard: React.FC<SuperAdminDashboardProps> = ({
                 <input 
                   type="email" 
                   required 
-                  className="w-full px-3 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-finantx-500 focus:border-finantx-500 outline-none"
+                  className="w-full px-3 py-2 rounded-lg border border-slate-600 bg-slate-700 text-white placeholder-slate-400 focus:ring-2 focus:ring-finantx-500 focus:border-finantx-500 outline-none"
                   value={formData.email}
                   onChange={e => setFormData({...formData, email: e.target.value})}
                 />

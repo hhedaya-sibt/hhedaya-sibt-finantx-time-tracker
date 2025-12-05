@@ -3,7 +3,7 @@ export enum Department {
   OPERATIONS = 'Operations',
   AFFILIATE = 'Affiliate Contractors',
   SIBT_PWR_ADMIN = 'SIBT-PWR Admin',
-  ACCOUNTING = 'Accounting'
+  CORRESPONDENCE = 'Correspondence'
 }
 
 export interface Employee {

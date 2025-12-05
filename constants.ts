@@ -5,7 +5,7 @@ export const DEPARTMENTS = [
   Department.OPERATIONS,
   Department.AFFILIATE,
   Department.SIBT_PWR_ADMIN,
-  Department.ACCOUNTING,
+  Department.CORRESPONDENCE,
 ];
 
 export const INITIAL_SUPERVISORS: Supervisor[] = [
@@ -19,10 +19,10 @@ export const INITIAL_SUPERVISORS: Supervisor[] = [
   },
   {
     id: 'sup-2',
-    firstName: 'Sheri',
-    lastName: 'Smith',
-    email: 'sheri33600@gmail.com',
-    departments: [Department.ACCOUNTING],
+    firstName: 'Sabrena',
+    lastName: 'Eye',
+    email: 'seye@cardshield.me',
+    departments: [Department.CORRESPONDENCE],
     isAdmin: true,
   },
   {

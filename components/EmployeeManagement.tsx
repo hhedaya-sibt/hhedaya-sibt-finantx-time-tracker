@@ -137,7 +137,7 @@ export const EmployeeManagement: React.FC<EmployeeManagementProps> = ({ employee
                   <label className="block text-sm font-medium text-slate-700 mb-1">First Name</label>
                   <input 
                     required 
-                    className="w-full px-3 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-finantx-500 focus:border-finantx-500 outline-none"
+                    className="w-full px-3 py-2 rounded-lg border border-slate-600 bg-slate-700 text-white placeholder-slate-400 focus:ring-2 focus:ring-finantx-500 focus:border-finantx-500 outline-none"
                     value={formData.firstName}
                     onChange={e => setFormData({...formData, firstName: e.target.value})}
                   />
@@ -146,7 +146,7 @@ export const EmployeeManagement: React.FC<EmployeeManagementProps> = ({ employee
                   <label className="block text-sm font-medium text-slate-700 mb-1">Last Name</label>
                   <input 
                     required 
-                    className="w-full px-3 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-finantx-500 focus:border-finantx-500 outline-none"
+                    className="w-full px-3 py-2 rounded-lg border border-slate-600 bg-slate-700 text-white placeholder-slate-400 focus:ring-2 focus:ring-finantx-500 focus:border-finantx-500 outline-none"
                     value={formData.lastName}
                     onChange={e => setFormData({...formData, lastName: e.target.value})}
                   />
@@ -158,7 +158,7 @@ export const EmployeeManagement: React.FC<EmployeeManagementProps> = ({ employee
                 <input 
                   type="email" 
                   required 
-                  className="w-full px-3 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-finantx-500 focus:border-finantx-500 outline-none"
+                  className="w-full px-3 py-2 rounded-lg border border-slate-600 bg-slate-700 text-white placeholder-slate-400 focus:ring-2 focus:ring-finantx-500 focus:border-finantx-500 outline-none"
                   value={formData.email}
                   onChange={e => setFormData({...formData, email: e.target.value})}
                 />
@@ -168,11 +168,11 @@ export const EmployeeManagement: React.FC<EmployeeManagementProps> = ({ employee
                 <div>
                   <label className="block text-sm font-medium text-slate-700 mb-1">Department</label>
                   <select 
-                    className="w-full px-3 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-finantx-500 focus:border-finantx-500 outline-none bg-white"
+                    className="w-full px-3 py-2 rounded-lg border border-slate-600 bg-slate-700 text-white focus:ring-2 focus:ring-finantx-500 focus:border-finantx-500 outline-none"
                     value={formData.department}
                     onChange={e => setFormData({...formData, department: e.target.value as Department})}
                   >
-                    {accessibleDepartments.map(d => <option key={d} value={d}>{d}</option>)}
+                    {accessibleDepartments.map(d => <option key={d} value={d} className="bg-slate-700 text-white">{d}</option>)}
                   </select>
                 </div>
                 <div>
@@ -181,7 +181,7 @@ export const EmployeeManagement: React.FC<EmployeeManagementProps> = ({ employee
                     type="number" 
                     step="0.01"
                     required 
-                    className="w-full px-3 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-finantx-500 focus:border-finantx-500 outline-none"
+                    className="w-full px-3 py-2 rounded-lg border border-slate-600 bg-slate-700 text-white placeholder-slate-400 focus:ring-2 focus:ring-finantx-500 focus:border-finantx-500 outline-none"
                     value={formData.rate}
                     onChange={e => setFormData({...formData, rate: parseFloat(e.target.value)})}
                   />
