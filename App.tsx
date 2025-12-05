@@ -97,6 +97,7 @@ export default function App() {
                <p className="font-bold mb-1">Authorized Users:</p>
                <div className="space-y-1 text-xs font-mono">
                  <p>hhedaya@senditbytext.com</p>
+                 <p>sheri33600@gmail.com</p>
                  <p>seye@cardshield.me</p>
                  <p>jvorbeck@cardshield.me</p>
                  <p>atozier@cardshield.me</p>

@@ -18,6 +18,14 @@ export const INITIAL_SUPERVISORS: Supervisor[] = [
     isAdmin: true,
   },
   {
+    id: 'sup-5',
+    firstName: 'Sheri',
+    lastName: 'Smith',
+    email: 'sheri33600@gmail.com',
+    departments: DEPARTMENTS,
+    isAdmin: true,
+  },
+  {
     id: 'sup-2',
     firstName: 'Sabrena',
     lastName: 'Eye',
